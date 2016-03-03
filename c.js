@@ -33,24 +33,28 @@ var client = function(error_func)
   self.get = function()
   {
     var xhr = getXHR();
-    xhr.open("GET",server_url);
+    xhr.open("GET",self.server_url);
     xhr.send();
   }
 
   self.add = function(event)
   {
     var xhr = getXHR();
-    xhr.open("GET",server_url+"?event="+event);
+    xhr.open("GET",self.server_url+"?event="+event);
     xhr.send();
   }
 
   self.got = function(r)
   {
     //console.log(r);
-    var merge_db = r.split("\n");
-    if(merge_db.length == 0) return;
-    for(var i = 0; i < merge_db.length; i++)
-      merge_db[i] = new Entry( parseInt(merge_db[i].substring(0,merge_db[i].indexOf(" "))), merge_db[i].substring(merge_db[i].indexOf(" ")+1) );
+    var merge_lines = r.split("\n");
+    if(merge_lines.length == 0) return;
+    var merge_db = [];
+    for(var i = 0; i < merge_lines.length; i++)
+    {
+      if(!merge_lines[i]) continue;
+      merge_db[i] = new Entry( parseInt(merge_lines[i].substring(0,merge_lines[i].indexOf(" "))), merge_lines[i].substring(merge_lines[i].indexOf(" ")+1) );
+    }
     var merge_i_begin = merge_db[0].i;
 
     //first population
